@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Yatra</title>
+</head>
+<body>
+    <h3>Edit your property</h3>
+
+     <form action="/listing/<%=list.id%>?_method=PATCH" method="POST">
+        <p>Enter your property new title: <%= list.title  %> </p>
+        <input type="text" name="title">
+        <p>Enter new description: <%= list.description  %></p>
+        <textarea name="description" rows="15" cols="20"></textarea>
+        <p>Enter your new price: <%= list.price  %></p>
+        <input type="number" name="price">
+        <p>Enter your new location:<%= list.location  %></p>
+        <input type="text" name="location">
+        <p>Enter your new country: <%= list.country  %></p>
+        <input type="text" name="country">
+
+        <button>Submit</button>
+    </form>
+    
+</body>
+</html>

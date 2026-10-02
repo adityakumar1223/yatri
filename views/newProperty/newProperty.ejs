@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Yatri</title>
+</head>
+<body>
+    <form action="/listing" method="POST">
+        <p>Enter your property title:</p>
+        <input type="text" name="title">
+        <p>Enter description:</p>
+        <textarea name="description" rows="15" cols="20"></textarea>
+        <p>Enter your price:</p>
+        <input type="number" name="price">
+        <p>Enter your location:</p>
+        <input type="text" name="location">
+        <p>Enter your country:</p>
+        <input type="text" name="country">
+        <p>Enter your image -> image filename and url: </p>
+        <input type="text" name="image[filename]" placeholder="listingimage">
+        <input type="text" name="image[url]" placeholder="url">
+
+        <button>Submit</button>
+    </form>
+</body>
+</html>

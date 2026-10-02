@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Yatri</title>
+</head>
+<body>
+    <h3>All listings</h3>
+    <form action="/listing/new"><button>New Property</button></form>
+    <ul>
+
+       <% for(let listing of allListings){ %>
+           <a href="/listing/<%=listing._id %>"> <li><%= listing.title %> </li></a>
+        <% } %>
+        
+    </ul>
+    
+</body>
+</html>

@@ -1,0 +1,30 @@
+{
+  "name": "yatri",
+  "version": "1.0.0",
+  "description": "Yatri is a website made for wonderer people where they can come and seek for attractive rentals in various destinations.",
+  "homepage": "https://github.com/adityakumar1223/yatri#readme",
+  "bugs": {
+    "url": "https://github.com/adityakumar1223/yatri/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/adityakumar1223/yatri.git"
+  },
+  "license": "ISC",
+  "author": "Aditya Kumar",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "nodemon app.js"
+  },
+  "dependencies": {
+    "ejs": "^6.0.1",
+    "express": "^5.2.1",
+    "method-override": "^3.0.0",
+    "mongoose": "^9.10.3",
+    "nodemon": "^3.1.14",
+    "path": "^0.12.7",
+    "uuid": "^14.0.2"
+  }
+}

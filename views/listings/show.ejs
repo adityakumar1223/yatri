@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Yatri</title>
+</head>
+<body>
+    <h3>Listing Details:</h3>
+    <ul>
+        <li> <%=property.title %> </li>
+        <li> <%=property.description %> </li>
+        <li> &#8377;<%=property.price.toLocaleString("en-IN") %> </li>
+        <li> <%=property.location %> </li>
+        <li> <%=property.country %> </li>
+    </ul>
+
+    <form action="/listing/<%=property.id%>/edit" >
+        <button>Edit</button>
+    </form>
+    <br><br>
+    <form action="/listing/<%=property.id%>/delete?_method=DELETE" method="POST" >
+        <button>Delete</button>
+    </form>
+
+    
+    
+</body>
+</html>

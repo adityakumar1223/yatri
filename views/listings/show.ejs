@@ -1,29 +1,59 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Yatri</title>
-</head>
-<body>
-    <h3>Listing Details:</h3>
-    <ul>
-        <li> <%=property.title %> </li>
-        <li> <%=property.description %> </li>
-        <li> &#8377;<%=property.price.toLocaleString("en-IN") %> </li>
-        <li> <%=property.location %> </li>
-        <li> <%=property.country %> </li>
-    </ul>
+<% layout("/layouts/boilerplate") %>
 
-    <form action="/listing/<%=property.id%>/edit" >
-        <button>Edit</button>
-    </form>
-    <br><br>
-    <form action="/listing/<%=property.id%>/delete?_method=DELETE" method="POST" >
-        <button>Delete</button>
-    </form>
+<div class="row justify-content-center padman">
+  <div class="col-12 col-md-8">
+    <h3 class="mb-4">Listing Details</h3>
 
-    
-    
-</body>
-</html>
+    <div class="card shadow-sm">
+      <!-- Listing Image -->
+      <img
+        src="<%= property.image.url %>"
+        class="card-img-top"
+        alt="<%= property.title %>"
+        style="height: 350px; object-fit: cover"
+      />
+
+      <div class="card-body">
+        <!-- Title -->
+        <h4 class="card-title mb-3"><%= property.title %></h4>
+
+        <!-- Description -->
+        <p class="card-text"><%= property.description %></p>
+
+        <hr />
+
+        <!-- Listing Information -->
+        <div class="mb-3">
+          <p class="mb-2">
+            <strong>Price:</strong>
+            ₹<%= property.price.toLocaleString("en-IN") %>
+          </p>
+
+          <p class="mb-2">
+            <strong>Location:</strong>
+            <%= property.location %>
+          </p>
+
+          <p class="mb-2">
+            <strong>Country:</strong>
+            <%= property.country %>
+          </p>
+        </div>
+
+        <!-- Buttons -->
+        <div class="d-flex gap-2 mt-4">
+          <form action="/listing/<%= property.id %>/edit">
+            <button class="btn add-btn">Edit Listing</button>
+          </form>
+
+          <form
+            action="/listing/<%= property.id %>/delete?_method=DELETE"
+            method="POST"
+          >
+            <button class="btn btn-outline-danger ">Delete Listing</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

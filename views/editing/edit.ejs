@@ -1,27 +1,89 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Yatra</title>
-</head>
-<body>
-    <h3>Edit your property</h3>
+<% layout("/layouts/boilerplate") %>
+<div class="row justify-content-center">
+  <div class="col-12 col-md-8">
+    <h3 class="mb-4">Edit your property</h3>
+    <form action="/listing/<%= list.id %>?_method=PATCH" method="POST">
+      <!-- Title -->
+      <div class="mb-3">
+        <label for="title" class="form-label"> Enter new title </label>
+        <input
+          type="text"
+          name="title"
+          id="title"
+          class="form-control"
+          value="<%= list.title %>"
+        />
+        <div class="form-text">Current title: <%= list.title %></div>
+      </div>
 
-     <form action="/listing/<%=list.id%>?_method=PATCH" method="POST">
-        <p>Enter your property new title: <%= list.title  %> </p>
-        <input type="text" name="title">
-        <p>Enter new description: <%= list.description  %></p>
-        <textarea name="description" rows="15" cols="20"></textarea>
-        <p>Enter your new price: <%= list.price  %></p>
-        <input type="number" name="price">
-        <p>Enter your new location:<%= list.location  %></p>
-        <input type="text" name="location">
-        <p>Enter your new country: <%= list.country  %></p>
-        <input type="text" name="country">
+      <!-- Description -->
+      <div class="mb-3">
+        <label for="description" class="form-label"
+          >Enter new description</label
+        >
+        <textarea
+          name="description"
+          id="description"
+          class="form-control"
+        >
+<%= list.description %></textarea
+        >
 
-        <button>Submit</button>
+        <div class="form-text">
+          Current description: <%= list.description %>
+        </div>
+      </div>
+
+      <div class="row">
+        <!-- Price -->
+        <div class="mb-3 col-md-4">
+          <label for="price" class="form-label"> Enter new price </label>
+
+          <input
+            type="number"
+            name="price"
+            id="price"
+            class="form-control"
+            value="<%= list.price %>"
+          />
+          <div class="form-text">Current price: ₹<%= list.price %></div>
+        </div>
+
+        <!-- Country -->
+        <div class="mb-4 col-md-8">
+          <label for="country" class="form-label"> Enter new country </label>
+
+          <input
+            type="text"
+            name="country"
+            id="country"
+            class="form-control"
+            value="<%= list.country %>"
+          />
+        </div>
+        <div class="form-text">Current country: <%= list.country %></div>
+      </div>
+
+      <!-- Location -->
+      <div class="mb-3">
+        <label for="location" class="form-label"> Enter new location </label>
+
+        <input
+          type="text"
+          name="location"
+          id="location"
+          class="form-control"
+          value="<%= list.location %>"
+        />
+
+        <div class="form-text">Current location: <%= list.location %></div>
+      </div>
+
+      <!-- Submit -->
+      <button type="submit" class="btn btn-dark add-btn">Update Listing</button>
+      <a href="/listing/<%= list.id %>" class="btn btn-outline-secondary ms-2"
+        >Cancel</a
+      >
     </form>
-    
-</body>
-</html>
+  </div>
+</div>

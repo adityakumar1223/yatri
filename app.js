@@ -6,6 +6,9 @@ import mongoose from "mongoose";
 import { Listing } from "./models/listing.js";
 import methodOverride from "method-override";
 import ejsMate from "ejs-mate";
+import {asyncWrapper, asyncWrap} from './utils/wrapAsync.js';
+import ExpressError from "./utils/ExpressError.js";
+import listingSchema from "./schema.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -60,51 +63,69 @@ app.get("/listing/new", (req, res) => {
   res.status(200).render("./newProperty/newProperty.ejs");
 });
 
-app.post("/listing", async (req, res) => {
-  let newList = req.body;
-  await Listing.create(newList)
-    .then((response) => {
-      console.log(response);
-    })
-    .catch((err) => console.log(err));
-  res.status(200).redirect("/listing");
-});
+const validateSchema = (req, res, next) =>{
+   let {error} = listingSchema.validate(req.body);
+   let errMsg = error.details.map((el) => el.message).join(",");
+   if(error){
+    throw new ExpressError(400, errMsg)
+   }else{
+    next();
+   }
+    console.log(result);
+}
+
+app.post("/listing", validateSchema, asyncWrapper(async (req, res, next) => {
+   
+    let newList = req.body.listing;
+    let  newListing = new Listing(newList)
+    await newListing.save();
+    res.status(200).redirect("/listing");
+}));
 
 //showing properties
-app.get("/listing", async (req, res) => {
+app.get("/listing", asyncWrapper(async (req, res) => {
   const allListings = await Listing.find({});
-  res.status(200).render("./listings/index.ejs", { allListings });
-});
+  // console.log(allListings);
+  res.status(200).render("./listings/index.ejs",{allListings});
+}));
 
-app.get("/listing/:id", async (req, res) => {
+app.get("/listing/:id", asyncWrapper(async (req, res) => {
   let { id } = req.params;
   let property = await Listing.findById(id);
   res.status(200).render("./listings/show.ejs", { property });
-});
+}));
 
 //edit and update route
-app.get("/listing/:id/edit", async (req, res) => {
+app.get("/listing/:id/edit", asyncWrapper(async (req, res) => {
   let { id } = req.params;
   let list = await Listing.findById(id);
   res.status(200).render("./editing/edit.ejs", { list });
-});
+}));
 
-app.patch("/listing/:id", async (req, res) => {
+app.patch("/listing/:id", asyncWrap(async (req, res) => {
+  if(!req.body){
+    throw new ExpressError(400, "please enter valid inputs")
+  }
   let { id } = req.params;
   let list = req.body;
   await Listing.findByIdAndUpdate(id, list);
   res.status(200).redirect("/listing");
-});
+}));
 
 //delete route
-app.delete("/listing/:id/delete", async (req, res) => {
+app.delete("/listing/:id/delete", asyncWrap(async (req, res) => {
   let { id } = req.params;
   await Listing.findByIdAndDelete(id);
   res.status(200).redirect("/listing");
-});
+}));
 
-app.use((req, res) => {
-  res.status(404).send("This page doesn't exist");
+app.all("/{*splat}", (req, res, next)=>{
+  next(new ExpressError(404, `${req.path} not found`));
+})
+
+app.use((err, req, res,next) => {
+  let {status = 500, message = "Something went wrong"} = err;
+  res.status(status).render("error.ejs", {err});
 });
 
 app.listen(port, () => {

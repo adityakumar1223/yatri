@@ -2,7 +2,12 @@
 <div class="row justify-content-center">
   <div class="col-12 col-md-8">
     <h3 class="mb-4">Edit your property</h3>
-    <form action="/listing/<%= list.id %>?_method=PATCH" method="POST">
+    <form
+      action="/listing/<%= list.id %>?_method=PATCH"
+      novalidate
+      class="needs-validation"
+      method="POST"
+    >
       <!-- Title -->
       <div class="mb-3">
         <label for="title" class="form-label"> Enter new title </label>
@@ -12,8 +17,11 @@
           id="title"
           class="form-control"
           value="<%= list.title %>"
+          required
         />
         <div class="form-text">Current title: <%= list.title %></div>
+        <div class="valid-feedback">Good!</div>
+        <div class="invalid-feedback">You should enter something i guess??</div>
       </div>
 
       <!-- Description -->
@@ -25,6 +33,7 @@
           name="description"
           id="description"
           class="form-control"
+          required
         >
 <%= list.description %></textarea
         >
@@ -32,6 +41,8 @@
         <div class="form-text">
           Current description: <%= list.description %>
         </div>
+        <div class="valid-feedback">Good!</div>
+        <div class="invalid-feedback">You should enter something i guess??</div>
       </div>
 
       <div class="row">
@@ -45,8 +56,13 @@
             id="price"
             class="form-control"
             value="<%= list.price %>"
+            required
           />
           <div class="form-text">Current price: ₹<%= list.price %></div>
+          <div class="valid-feedback">Good!</div>
+          <div class="invalid-feedback">
+            You should enter something i guess??
+          </div>
         </div>
 
         <!-- Country -->
@@ -59,9 +75,12 @@
             id="country"
             class="form-control"
             value="<%= list.country %>"
+            required
           />
         </div>
         <div class="form-text">Current country: <%= list.country %></div>
+        <div class="valid-feedback">Good!</div>
+        <div class="invalid-feedback">You should enter something i guess??</div>
       </div>
 
       <!-- Location -->
@@ -74,9 +93,12 @@
           id="location"
           class="form-control"
           value="<%= list.location %>"
+          required
         />
 
         <div class="form-text">Current location: <%= list.location %></div>
+        <div class="valid-feedback">Good!</div>
+        <div class="invalid-feedback">You should enter something i guess??</div>
       </div>
 
       <!-- Submit -->

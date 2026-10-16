@@ -60,7 +60,7 @@ body {
 
 /* card styling */
 
-.card {
+.listing-card {
   border: none;
   margin-bottom: 2rem;
 }
@@ -79,14 +79,14 @@ body {
     font-weight: 400 !important;
 }
 
-.card {
+.listing-card {
     transition: transform 0.25s ease, box-shadow 0.25s ease;
     border: none;
     padding-top: 20px;
     padding-bottom: 20px;
 }
 
-.card:hover {
+.listing-card:hover {
     transform: scale(1.03);
     box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
 

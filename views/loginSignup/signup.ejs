@@ -1,0 +1,63 @@
+<%- layout('/layouts/boilerplate.ejs') %>
+<div class="row-mt-3">
+  <div class="col-6 offset-3">
+    <h1 class="col-6 offset-3">Sign up on Yatri</h1>
+    <form action="/user/signup" method="POST" novalidate class="needs-validation">
+      <div class="mt-3">
+        <label for="name">Enter full name: </label>
+        <input
+          type="text"
+          name="name"
+          id="name"
+          placeholder="eg: John Ellia"
+          class="form-control"
+          required
+        />
+        <div class="valid-feedback">Great!</div>
+        <div class="invalid-feedback">Enter something man!</div>
+      </div>
+      <div class="mt-3">
+        <label for="username">Enter username:</label>
+        <input
+          type="text"
+          name="username"
+          id="username"
+          placeholder="@username"
+          class="form-control"
+          required
+        />
+        <div class="valid-feedback">looks good</div>
+        <div class="invalid-feedback">I don't think that's appropriate</div>
+      </div>
+      <div class="mt-3">
+        <label for="email">Enter email:</label>
+        <input
+          type="text"
+          name="email"
+          is="email"
+          placeholder="example@mail.com"
+          class="form-control"
+          required
+        />
+        <div class="valid-feedback">absolutely fine</div>
+        <div class="invalid-feedback">are you gay?</div>
+      </div>
+      <div class="mt-3">
+        <label for="password">Enter your password</label>
+        <input
+          type="password"
+          name="password"
+          id="password"
+          placeholder="********"
+          class="form-control"
+          required
+        />
+        <div class="valid-feedback">Absolutely fine</div>
+        <div class="invalid-feedback">Somethings not correct</div>
+      </div>
+      <div class="mt-3">
+        <button class="btn btn-dark">Sign Up</button>
+      </div>
+    </form>
+  </div>
+</div>

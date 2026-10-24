@@ -1,55 +1,19 @@
-import express from 'express';
-import Review from "../models/review.js";
-import {reviewSchema} from '../schema.js';
-import { asyncWrap, asyncWrapper } from '../utils/wrapAsync.js';
-import ExpressError from '../utils/ExpressError.js';
-import { Listing } from '../models/listing.js';
+import express from "express";
+import { asyncWrap, asyncWrapper } from "../utils/wrapAsync.js";
+import { isLoggedIn, isReviewOwner, validateReview } from "../middleware.js";
+import { postReview, deleteReview, indexCallback } from "../controller/review.js";
+import ExpressError from "../utils/ExpressError.js";
 
-const router = express.Router({mergeParams: true});
-
-const validateReview = (req, res, next) => {
-  let { error } = reviewSchema.validate(req.body);
-  if (error) {
-    let errMsg = error.details.map((el) => el.message).join(",");
-    throw new ExpressError(400, errMsg);
-  } else {
-    next();
-  }
-};
+const router = express.Router({ mergeParams: true });
 
 // #-> reviews routes
 //reviews post route
-router.post(
-  "/",
-  validateReview,
-  asyncWrap(async (req, res) => {
-    let { id } = req.params;
-    let listing = await Listing.findById(id);
-    let extractedInfo = req.body.review;
 
-    let newReview = await Review.create(extractedInfo);
-    listing.reviews.push(newReview);
-
-    await newReview.save();
-    let result = await listing.save();
-    req.flash("sucess", "Review added sucessfully");
-
-    console.log(result);
-    res.status(200).redirect(`/listing/${id}`);
-  }),
-);
-
+router.route("/")
+.get( asyncWrap(indexCallback))
+.post( isLoggedIn, validateReview, asyncWrap(postReview));
 
 // reviews delete route
+router.delete("/:reviewId", isLoggedIn, isReviewOwner, asyncWrap(deleteReview));
 
-router.delete("/:reviewId", asyncWrap(async(req, res)=>{
-
-  let {id, reviewId} = req.params;
-  await Listing.findByIdAndUpdate(id, {$pull: {reviews: reviewId}});
-  await Review.findByIdAndDelete(reviewId);
-  req.flash("sucess", "Review deleted sucessfully");
-  res.status(200).redirect(`/listing/${id}`);
-
-}));
-
-export {router};
+export { router };

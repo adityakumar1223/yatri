@@ -7,13 +7,14 @@
       novalidate
       class="needs-validation"
       method="POST"
+      enctype="multipart/form-data"
     >
       <!-- Title -->
       <div class="mb-3">
         <label for="title" class="form-label"> Enter new title </label>
         <input
           type="text"
-          name="title"
+          name="listing[title]"
           id="title"
           class="form-control"
           value="<%= list.title %>"
@@ -30,7 +31,7 @@
           >Enter new description</label
         >
         <textarea
-          name="description"
+          name="listing[description]"
           id="description"
           class="form-control"
           required
@@ -52,7 +53,7 @@
 
           <input
             type="number"
-            name="price"
+            name="listing[price]"
             id="price"
             class="form-control"
             value="<%= list.price %>"
@@ -71,16 +72,28 @@
 
           <input
             type="text"
-            name="country"
+            name="listing[country]"
             id="country"
             class="form-control"
             value="<%= list.country %>"
             required
           />
+          <div class="form-text">Current country: <%= list.country %></div>
         </div>
-        <div class="form-text">Current country: <%= list.country %></div>
         <div class="valid-feedback">Good!</div>
         <div class="invalid-feedback">You should enter something i guess??</div>
+      </div>
+
+      <!-- edit url -->
+      <div class="mb-3">
+        <label for="image" class="form-label">Choose photo</label>
+        <input type="file" name="listing[image]" class="form-control" />
+        <img
+          src="<%=list.image.url%>"
+          alt="image"
+          style="height: 350px; object-fit: cover"
+          class="mt-2"
+        />
       </div>
 
       <!-- Location -->
@@ -89,7 +102,7 @@
 
         <input
           type="text"
-          name="location"
+          name="listing[location]"
           id="location"
           class="form-control"
           value="<%= list.location %>"

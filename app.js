@@ -1,3 +1,4 @@
+import dotenv from 'dotenv';
 import express from "express";
 import path from "path";
 import { fileURLToPath } from "url";
@@ -5,30 +6,49 @@ import mongoose from "mongoose";
 import methodOverride from "method-override";
 import ejsMate from "ejs-mate";
 import ExpressError from "./utils/ExpressError.js";
-import { router as listings } from "./routes/listing.js";
-import { router as reviews } from "./routes/review.js";
+import { router as listingsRouter } from "./routes/listing.js";
+import { router as reviewsRouter } from "./routes/review.js";
 import session from "express-session";
+import MongoStore from 'connect-mongo';
 import flash from 'connect-flash';
 import passport from 'passport';
 import LocalStrategy from 'passport-local';
 import User from "./models/user.js";
+import {router as userRouter} from './routes/user.js';
+import { error } from 'console';
+
+dotenv.config();
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-const MONGO_URL = "mongodb://127.0.0.1:27017/yatri";
+const dbURL = process.env.MONGO_URL;
+const app = express();
 
 main()
-  .then((res) => {
-    console.log("Connection sucessfull...");
-  })
-  .catch((err) => {
-    console.log(err);
-  });
+.then((res) => {
+  console.log("Connection sucessfull...");
+})
+.catch((err) => {
+  console.log(err);
+});
 
-const app = express();
+const store = MongoStore.create({
+  mongoUrl: dbURL,
+  crypto: {
+    secret: process.env.SECRET,
+  },
+touchAfter: 24 * 60 * 60 ,
+})
+
+store.on("error",()=>{
+  console.log("Error in the MONGO session store", error);
+})
+
+
 const sessionOptions = {
-  secret: "thisIsMySuperSecret",
+  store,
+  secret: process.env.SECRET,
   resave: false,
   saveUninitialized: true,
   cookie: {
@@ -45,11 +65,14 @@ app.use(express.static(path.join(__dirname, "public")));
 app.use(express.urlencoded({ extended: true }));
 app.use(methodOverride("_method"));
 app.use(session(sessionOptions));
-app.use(flash());
-
 app.use(passport.initialize());
 app.use(passport.session());
-app.use(new LocalStrategy(User.authenticate()));
+passport.use(new LocalStrategy(User.authenticate()));
+
+passport.serializeUser(User.serializeUser());
+passport.deserializeUser(User.deserializeUser());
+
+app.use(flash());
 
 
 app.engine("ejs", ejsMate);
@@ -57,8 +80,15 @@ app.engine("ejs", ejsMate);
 let port = 3000;
 
 async function main() {
-  await mongoose.connect(MONGO_URL);
+  await mongoose.connect(dbURL);
 }
+
+//map testing
+app.get("/map-test", (req, res) => {
+  res.render("map-test", {
+    mapToken: process.env.MAP_TOKEN
+  });
+});
 
 app.get("/", (req, res) => {
   res.status(200).redirect("/listing");
@@ -67,11 +97,13 @@ app.get("/", (req, res) => {
 app.use((req, res, next)=>{
   res.locals.sucessMsg = req.flash("sucess");
   res.locals.error = req.flash("error");
+  res.locals.currUser = req.user;
   next();
 })
 
-app.use("/listing", listings);
-app.use("/listing/:id/reviews", reviews);
+app.use("/listing", listingsRouter);
+app.use("/listing/:id/reviews", reviewsRouter);
+app.use("/user", userRouter);
 
 app.all("/{*splat}", (req, res, next) => {
   next(new ExpressError(404, `${req.path} not found`));
